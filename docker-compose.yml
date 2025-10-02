@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # Base de données principale
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: supply_chain_user
+      POSTGRES_PASSWORD: supply_chain_password
+      POSTGRES_DB: supply_chain_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./packages/database/init-scripts:/docker-entrypoint-initdb.d
+
+  # Base de données analytique
+  clickhouse:
+    image: yandex/clickhouse-server:21.8
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+  # Cache
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Base de données NoSQL
+  mongodb:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: supply_chain_user
+      MONGO_INITDB_ROOT_PASSWORD: supply_chain_password
+    volumes:
+      - mongodb_data:/data/db
+
+  # Backend API
+  backend:
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://supply_chain_user:supply_chain_password@postgres:5432/supply_chain_db
+      - REDIS_URL=redis://redis:6379
+      - MONGODB_URL=mongodb://supply_chain_user:supply_chain_password@mongodb:27017
+    depends_on:
+      - postgres
+      - redis
+      - mongodb
+
+  # Interface web
+  frontend:
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  clickhouse_data:
+  redis_data:
+  mongodb_data:
