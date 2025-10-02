@@ -2,7 +2,7 @@
 FROM node:18-alpine
 
 # Mettre à jour les packages pour corriger les vulnérabilités
-RUN apk update && apk upgrade
+RUN apk update && apk upgrade && apk add --no-cache curl
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
