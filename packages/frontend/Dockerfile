@@ -2,7 +2,7 @@
 FROM node:18-alpine AS build
 
 # Mettre à jour les packages pour corriger les vulnérabilités
-RUN apk update && apk upgrade && apk add --no-cache curl
+RUN apk update && apk upgrade && apk add --no-cache curl ca-certificates
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
@@ -23,7 +23,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Mettre à jour les packages pour corriger les vulnérabilités
-RUN apk update && apk upgrade && apk add --no-cache curl
+RUN apk update && apk upgrade && apk add --no-cache curl ca-certificates
 
 # Copier les fichiers construits dans le répertoire nginx
 COPY --from=build /app/build /usr/share/nginx/html
