@@ -2,7 +2,7 @@
 FROM node:20-alpine
 
 # Mettre à jour les packages pour corriger les vulnérabilités
-RUN apk update && apk upgrade && apk add --no-cache curl ca-certificates
+RUN apk update && apk upgrade && apk add --no-cache curl ca-certificates npm
 
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
