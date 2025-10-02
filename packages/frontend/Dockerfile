@@ -1,5 +1,5 @@
 # Utiliser l'image officielle Node.js comme image de base
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 # Mettre à jour les packages pour corriger les vulnérabilités
 RUN apk update && apk upgrade && apk add --no-cache curl ca-certificates
