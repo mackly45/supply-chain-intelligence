@@ -1,6 +1,9 @@
 # Utiliser l'image officielle Node.js comme image de base
 FROM node:18-alpine
 
+# Mettre à jour les packages pour corriger les vulnérabilités
+RUN apk update && apk upgrade
+
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 

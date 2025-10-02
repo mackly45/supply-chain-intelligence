@@ -4,4 +4,7 @@ module.exports = {
   rules: {
     // Ajoutez vos règles personnalisées ici
   },
+  parserOptions: {
+    requireConfigFile: false,
+  },
 };
