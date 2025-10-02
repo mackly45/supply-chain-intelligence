@@ -8,13 +8,13 @@ RUN apk update && apk upgrade
 WORKDIR /app
 
 # Copier les fichiers package.json et package-lock.json
-COPY package*.json ./
+COPY web/package*.json ./
 
 # Installer les dépendances
 RUN npm ci
 
 # Copier le reste du code de l'application
-COPY . .
+COPY web/. .
 
 # Construire l'application
 RUN npm run build
