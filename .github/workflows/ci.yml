@@ -32,7 +32,7 @@ jobs:
     - name: Run linting
       run: |
         cd packages/frontend/mobile
-        npm run lint
+        npx eslint .
 
     - name: Run tests
       run: |
