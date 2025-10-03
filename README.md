@@ -19,8 +19,44 @@ Une plateforme SaaS open source, full-stack, data-driven pour l'optimisation de 
 - IA/ML : Python (FastAPI/Flask)
 - Infrastructure : Docker, GitHub Actions, Kubernetes (optionnel)
 
+## Bases de données
+
+Le projet utilise plusieurs bases de données spécialisées :
+
+### PostgreSQL - supply_chain_db (Port 5432)
+Base de données principale pour les opérations de chaîne d'approvisionnement
+
+### PostgreSQL - IA_supply (Port 5433)
+Base de données spécialisée pour les opérations d'intelligence artificielle et d'analytique
+
+### MongoDB - supply-IA (Port 27017)
+Base de données NoSQL pour le stockage flexible de données et prédictions d'IA
+
+### ClickHouse (Ports 8123/9000)
+Base de données analytique pour l'analyse en temps réel et les rapports
+
+### Redis (Port 6379)
+Cache et gestion de sessions pour des performances optimales
+
+Pour plus de détails sur la configuration et le schéma des bases de données, consultez [packages/database/README.md](packages/database/README.md)
+
 ## Installation
-À venir...
+
+### Prérequis
+- Docker et Docker Compose
+- Node.js (v16 ou supérieur)
+- Python (v3.8 ou supérieur)
+
+### Démarrage rapide
+1. Clonez le dépôt
+2. Exécutez `docker-compose up` depuis la racine du projet
+3. Les bases de données seront automatiquement initialisées
+4. Accédez aux services via les ports configurés
+
+### Initialisation des bases de données
+Exécutez le script d'initialisation :
+- Sur Windows : `packages/database/init-databases.bat`
+- Sur Linux/Mac : `packages/database/init-databases.sh`
 
 ## Contribution
 Ce projet est open source sous licence MIT. Les contributions sont les bienvenues !

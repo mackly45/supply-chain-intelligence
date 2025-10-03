@@ -14,6 +14,19 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./packages/database/init-scripts:/docker-entrypoint-initdb.d
 
+  # Base de données PostgreSQL pour l'IA
+  postgres-ia:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ia_user
+      POSTGRES_PASSWORD: ia_password
+      POSTGRES_DB: IA_supply
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_ia_data:/var/lib/postgresql/data
+      - ./packages/database/init-scripts:/docker-entrypoint-initdb.d
+
   # Base de données analytique
   clickhouse:
     image: yandex/clickhouse-server:21.8
@@ -30,6 +43,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    command: redis-server --appendonly yes
 
   # Base de données NoSQL
   mongodb:
@@ -51,12 +65,16 @@ services:
       - "3000:3000"
     environment:
       - DATABASE_URL=postgresql://supply_chain_user:supply_chain_password@postgres:5432/supply_chain_db
+      - DATABASE_IA_URL=postgresql://ia_user:ia_password@postgres-ia:5432/IA_supply
       - REDIS_URL=redis://redis:6379
-      - MONGODB_URL=mongodb://supply_chain_user:supply_chain_password@mongodb:27017
+      - MONGODB_URL=mongodb://supply_chain_user:supply_chain_password@mongodb:27017/supply-IA
+      - CLICKHOUSE_URL=http://clickhouse:8123
     depends_on:
       - postgres
+      - postgres-ia
       - redis
       - mongodb
+      - clickhouse
 
   # Interface web
   frontend:
@@ -70,6 +88,7 @@ services:
 
 volumes:
   postgres_data:
+  postgres_ia_data:
   clickhouse_data:
   redis_data:
   mongodb_data:
